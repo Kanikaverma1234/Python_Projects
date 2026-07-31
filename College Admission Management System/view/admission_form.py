@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from controllers.admission_controller import AdmissionController
-
-# from dao.admission_dao import AdmissionDAO
 from model.student import Student
 
 
@@ -191,6 +189,7 @@ class AdmissionForm(tk.LabelFrame):
 
         # Whenever the user selects a course,
         # calculate the pending fee.
+        # bind() is a method provided by tkinter to connect an event with a function.
         self.cmb_course.bind("<<ComboboxSelected>>", self.calculate_pending_fee)
 
         # ============== Fee Paid ============== #
@@ -335,10 +334,13 @@ class AdmissionForm(tk.LabelFrame):
         # Display course names in Combobox
         self.cmb_course["values"] = course_names
 
-        # Select first course automatically
+        # Select first course automatically (By default)
         if course_names:
             self.cmb_course.current(0)
+            # current() selects an item from the combobox
+            
             self.calculate_pending_fee()
+            # when the course is selected then it immediately calculates pending fees
 
     # ================ Calculate Pending Fee ======================= #
 
@@ -521,6 +523,7 @@ class AdmissionForm(tk.LabelFrame):
         # Refresh Student Table
         if self.student_table:
             self.student_table.load_students()
+            
 
     # ============ Delete Student ============ #
 

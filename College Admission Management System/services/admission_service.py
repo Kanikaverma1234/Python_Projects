@@ -1,5 +1,6 @@
 from dao.admission_dao import AdmissionDAO
 
+# It basically a middle layer between GUI(view) and dao layer. It is used because in future if we change the logic the database logic so we did not need to modify our GUI file.
 
 class AdmissionService:
 

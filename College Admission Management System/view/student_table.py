@@ -90,7 +90,7 @@ class StudentTable(tk.LabelFrame):
         self.student_tree.grid(
             row=0,
             column=0,
-            sticky="nsew",
+            sticky="nsew",  # the widgets stretches all four directions
         )
         self.student_tree.update_idletasks()
         # This will update the display of windows
@@ -98,13 +98,13 @@ class StudentTable(tk.LabelFrame):
         y_scroll.grid(
             row=0,
             column=1,
-            sticky="ns",
+            sticky="ns",  # top to bottom
         )
 
         x_scroll.grid(
             row=1,
             column=0,
-            sticky="ew",
+            sticky="ew",  # left to right
         )
 
         # Expand Treeview with Window
@@ -120,28 +120,25 @@ class StudentTable(tk.LabelFrame):
     # ================= Load Students ================== #
 
     def load_students(self):
-        print("load_students() called")
 
         try:
 
             # Remove old records
             for row in self.student_tree.get_children():
+                # get_children() returns IDs of all rows currently present in the Treeview.
+
                 self.student_tree.delete(row)
+                # we are deleting rows before insertion, to ensure the Treeview always displays the latest data and prevents duplicate rows.
 
             students = self.controller.get_all_students()
-
-            print("Students =", students)
+            # It will stored the list of tuples
 
             for student in students:
-
-                print("Length =", len(student))
-                print("Row =", student)
-                print("Tree rows before insert:", len(self.student_tree.get_children()))
-
                 self.student_tree.insert(
                     "",
                     tk.END,
                     values=(
+                        # based on the indexing
                         student[0],
                         student[1],
                         student[2],
@@ -157,30 +154,32 @@ class StudentTable(tk.LabelFrame):
                 )
                 self.student_tree.update_idletasks()
                 self.update_idletasks()
-                print("Tree rows after insert:", len(self.student_tree.get_children()))
+                # update_idletaks: process all pending GUI updates at real time so that the new row become visible without missing.
 
         except Exception:
             import traceback
+
+            # Its job is to show where the error happened and what caused it.
 
             traceback.print_exc()
 
     # ==========================================================
     # Row Selection
     # ==========================================================
-
+    # It explains how data moves from the Treeview back into the Admission Form
     def on_row_select(self, event):
 
         # No AdmissionForm linked
         if self.admission_form is None:
             return
 
-        # Get selected row
+        # Get selected row and returns it's ID of the currently selected row.
         selected = self.student_tree.focus()
 
         if not selected:
             return
 
-        # Get row values
+        # It returns the data stored in a row.
         values = self.student_tree.item(selected, "values")
 
         # Student ID
@@ -191,6 +190,7 @@ class StudentTable(tk.LabelFrame):
         result = self.controller.search_student(values[0])
 
         if result:
+            # .set() updates the Entry widget automatically.
 
             self.admission_form.student_name.set(result[1])
             self.admission_form.father_name.set(result[2])
