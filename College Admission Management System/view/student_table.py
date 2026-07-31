@@ -1,14 +1,16 @@
 import tkinter as tk
 from tkinter import ttk
 
-from dao.admission_dao import AdmissionDAO
+from controllers.admission_controller import AdmissionController
 
 
 class StudentTable(tk.LabelFrame):
 
     def __init__(self, parent, admission_form=None):
+        # if admission_form object is passed, the table can send selected data to the from.
 
         super().__init__(
+            # super is used to call the constructor of the parent class.
             parent,
             text=" Student Records ",
             font=("Segoe UI", 12, "bold"),
@@ -17,7 +19,7 @@ class StudentTable(tk.LabelFrame):
         )
 
         # DAO Object
-        self.dao = AdmissionDAO()
+        self.controller = AdmissionController()
 
         # Admission Form Reference
         self.admission_form = admission_form
@@ -91,6 +93,7 @@ class StudentTable(tk.LabelFrame):
             sticky="nsew",
         )
         self.student_tree.update_idletasks()
+        # This will update the display of windows
 
         y_scroll.grid(
             row=0,
@@ -125,7 +128,7 @@ class StudentTable(tk.LabelFrame):
             for row in self.student_tree.get_children():
                 self.student_tree.delete(row)
 
-            students = self.dao.get_all_students()
+            students = self.controller.get_all_students()
 
             print("Students =", students)
 
@@ -185,7 +188,7 @@ class StudentTable(tk.LabelFrame):
 
         # Instead of filling only the visible columns,
         # fetch the complete student record from database.
-        result = self.dao.search_student(values[0])
+        result = self.controller.search_student(values[0])
 
         if result:
 

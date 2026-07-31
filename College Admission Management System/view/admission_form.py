@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from controllers.admission_controller import AdmissionController
 
-from dao.admission_dao import AdmissionDAO
+# from dao.admission_dao import AdmissionDAO
 from model.student import Student
 
 
@@ -17,7 +18,7 @@ class AdmissionForm(tk.LabelFrame):
             pady=10,
         )
         # DAO object
-        self.dao = AdmissionDAO()
+        self.controller = AdmissionController()
 
         self.student_table = student_table
 
@@ -310,7 +311,7 @@ class AdmissionForm(tk.LabelFrame):
     def load_courses(self):
 
         # Get all courses from database
-        courses = self.dao.get_courses()
+        courses = self.controller.get_courses()
 
         # Empty list for course names
         course_names = []
@@ -426,7 +427,7 @@ class AdmissionForm(tk.LabelFrame):
         student.set_fee_status(self.fee_status.get())
 
         # Save into Database
-        self.dao.add_student(student)
+        self.controller.add_student(student)
 
         messagebox.showinfo("Success", "Student Added Successfully.")
 
@@ -450,7 +451,7 @@ class AdmissionForm(tk.LabelFrame):
             return
 
         # Search Student
-        result = self.dao.search_student(self.student_id.get())
+        result = self.controller.search_student(self.student_id.get())
 
         # Student Found
         if result:
@@ -510,7 +511,7 @@ class AdmissionForm(tk.LabelFrame):
         student.set_fee_status(self.fee_status.get())
 
         # Update Database
-        self.dao.update_student(student)
+        self.controller.update_student(student)
 
         messagebox.showinfo("Success", "Student Updated Successfully.")
 
@@ -538,7 +539,7 @@ class AdmissionForm(tk.LabelFrame):
         if answer:
 
             # Delete Student
-            self.dao.delete_student(int(self.student_id.get()))
+            self.controller.delete_student(int(self.student_id.get()))
 
             messagebox.showinfo("Success", "Student Deleted Successfully.")
 
